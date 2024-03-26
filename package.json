@@ -1,0 +1,31 @@
+{
+  "name": "fx-private-relay",
+  "description": "Firefox Relay provides generated email addresses to use in place of personal email addresses.",
+  "version": "1.0.0",
+  "author": "Mozilla",
+  "bugs": {
+    "url": "https://github.com/mozilla/fx-private-relay/issues"
+  },
+  "engines": {
+    "node": "14.18.x",
+    "npm": "8.1.x"
+  },
+  "volta": {
+    "node": "14.18.1",
+    "npm": "8.1.0"
+  },
+  "license": "MPL-2.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mozilla/fx-private-relay.git"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "heroku-prebuild": "printf '{\"commit\":\"%s\", \"commit_link\":\"https://github.com/mozilla/fx-private-relay/commit/%s\"}\n' \"$SOURCE_VERSION\" \"$SOURCE_VERSION\" > version.json",
+    "heroku-postbuild": "cd frontend; NODE_ENV=\"development\" npm ci; npm run build"
+  },
+  "homepage": "https://github.com/mozilla/fx-private-relay#readme"
+}
