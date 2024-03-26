@@ -1,0 +1,149 @@
+{% load static %}
+{% load ftl %}
+{% ftlconf bundle='privaterelay.ftl_bundles.main' %}
+
+<div class="c-filter js-filter-container">
+    <div class="c-filter-search">
+        <div class="c-filter-icon c-filter-icon-search js-filter-mobile-search-toggle"></div>
+        <form class="js-filter-search-form c-filter-search-form" action="">
+            <input class="c-filter-search-input js-filter-search-input " type="search" name="search" id="search" placeholder="{% ftlmsg 'profile-filter-search-placeholder' %}" >
+            <div class="c-filter-search-controls">
+                <div class="c-filter-case-count">
+                    <span class="js-filter-case-visible"></span>
+                    /
+                    <span class="js-filter-case-total"></span>
+                </div>
+                <button aria-label="{% ftlmsg 'profile-label-reset' %}" type="reset" class="c-filter-reset js-filter-reset">
+                    <img alt="Reset" src="{% static '/images/x-close.svg' %}"/>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="c-filter-date hidden">
+        <div class="c-filter-icon c-filter-icon-calendar"></div>
+    </div>
+    <div class="c-filter-category {% if not user_profile.has_unlimited %} hidden {% endif %}">
+        {% if user_profile.has_unlimited %}
+        <div class="c-filter-icon c-filter-icon-filter js-filter-category-toggle"></div>
+            <form class="c-filter-category-list">
+                <ul class="c-filter-category-types">
+                    <li class="c-filter-category-type">
+                        <div class="mzp-c-choices">
+                            <div class="mzp-c-choice">
+                                <input
+                                    data-category-type="active-aliases"
+                                    data-parent-category="active"
+                                    class="mzp-c-choice-control js-filter-category-checkbox"
+                                    type="checkbox" name="Show active aliases"
+                                    id="active-aliases"
+                                    value=""
+                                >
+                                <label class="mzp-c-choice-label" for="active-aliases">{% ftlmsg 'profile-filter-category-option-active-aliases' %}</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="c-filter-category-type">
+                        <div class="mzp-c-choices">
+                            <div class="mzp-c-choice">
+                                <input
+                                    data-category-type="disabled-aliases"
+                                    data-parent-category="active"
+                                    class="mzp-c-choice-control js-filter-category-checkbox"
+                                    type="checkbox" name="Show disabled aliases"
+                                    id="disabled-aliases"
+                                    value=""
+                                >
+                                <label class="mzp-c-choice-label" for="disabled-aliases">{% ftlmsg 'profile-filter-category-option-disabled-aliases' %}</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="c-filter-category-type">
+                        <div class="mzp-c-choices">
+                            <div class="mzp-c-choice">
+                                <input
+                                    data-category-type="relay-aliases"
+                                    data-parent-category="domain"
+                                    class="mzp-c-choice-control js-filter-category-checkbox"
+                                    type="checkbox" name="Show relay aliases"
+                                    id="relay-aliases"
+                                    value=""
+                                >
+                                <label class="mzp-c-choice-label" for="relay-aliases">{% ftlmsg 'profile-filter-category-option-relay-aliases' %}</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="c-filter-category-type">
+                        <div class="mzp-c-choices">
+                            <div class="mzp-c-choice">
+                                <input
+                                    data-category-type="domain-aliases"
+                                    data-parent-category="domain"
+                                    class="mzp-c-choice-control js-filter-category-checkbox"
+                                    type="checkbox" name="Show domain-based aliases"
+                                    id="domain-aliases"
+                                    value=""
+                                >
+                                <label class="mzp-c-choice-label" for="domain-aliases">{% ftlmsg 'profile-filter-category-option-domain-based-aliases' %}</label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="c-filter-category-buttons">
+                    <button type="reset" class="mzp-c-button mzp-t-md mzp-t-neutral js-filter-category-reset">
+                        {% ftlmsg 'profile-label-reset' %}
+                    </button>
+                    <button type="submit" class="mzp-c-button mzp-t-md mzp-t-product js-filter-category-apply">
+                        {% ftlmsg 'profile-label-apply' %}
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+    <div class="c-filter-action">
+        <!-- Button -->
+        <form action="{% url 'emails-index' %}" class="dash-create" method="POST">
+            <input type="hidden" name="api_token" value="{{ user_profile.api_token }}">
+            {% if user_profile.at_max_free_aliases and not user_profile.has_unlimited %}
+                {% if settings.PREMIUM_ENABLED %}
+                    <a
+                        href="{{ settings.FXA_SUBSCRIPTIONS_URL }}/products/{{ settings.PREMIUM_PROD_ID }}?plan={{ settings.PREMIUM_PRICE_ID }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-blue--ghost"
+                        data-event-label="Upgrade"
+                    >
+                        <span class="generate-new-alias-text">
+                            {% ftlmsg 'profile-label-upgrade' %}
+                        </span>
+                    </a>
+                {% else %}
+                    <button 
+                        disabled
+                        type="submit"
+                        class="blue-btn-states dash-create-new-relay flx al-cntr jst-cntr btn-disabled"
+                        title="{% ftlmsg 'profile-label-generate-new-alias' %}"
+                        value="{% ftlmsg 'profile-label-generate-new-alias' %}"
+                    >
+                        <span class="generate-new-relay-icon"></span>
+                        <span class="generate-new-alias-text">
+                            {% ftlmsg 'profile-label-generate-new-alias' %}
+                        </span>
+                    </button>
+                {% endif %}
+            {% else %}
+                <button
+                    class="blue-btn-states dash-create-new-relay flx al-cntr jst-cntr"
+                    title="{% ftlmsg 'profile-label-generate-new-alias' %}"
+                    type="submit"
+                    value="{% ftlmsg 'profile-label-generate-new-alias' %}"
+                    data-event-label="Create New Relay Alias"
+                >
+                    <span class="generate-new-relay-icon"></span>
+                    <span class="generate-new-alias-text">
+                        {% ftlmsg 'profile-label-generate-new-alias' %}
+                    </span>
+                </button>
+            {% endif %}
+        </form>
+    </div>
+</div>
