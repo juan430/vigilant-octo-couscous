@@ -1,0 +1,13 @@
+[report]
+omit =
+    *apps.py,
+    *migrations/*,
+    *settings*,
+    *tests/*,
+    *wsgi.py,
+    manage.py,
+    *phones/*,
+
+[run]
+relative_files = True
+source = .
