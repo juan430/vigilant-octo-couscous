@@ -1,0 +1,39 @@
+@import "../../styles/tokens.scss";
+
+.container {
+  position: relative;
+  border-radius: $border-radius-lg;
+  text-align: center;
+  // This leaves some space below the phone on mobile, and is based on the rough
+  // size of the phone image on small screens:
+  height: 650px;
+
+  @media screen and #{$mq-lg} {
+    width: 400px;
+  }
+  @media screen and #{$mq-xl} {
+    width: 550px;
+  }
+
+  // The three images are made to overlap:
+  img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    &.phone {
+      // Magic Number: This is the static width of the phone image
+      max-width: 369px;
+    }
+
+    &.background,
+    &.foreground {
+      display: none;
+
+      @media screen and #{$mq-md} {
+        display: inline-block;
+      }
+    }
+  }
+}
