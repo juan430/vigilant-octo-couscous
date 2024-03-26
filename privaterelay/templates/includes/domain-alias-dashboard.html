@@ -1,0 +1,24 @@
+{% load relay_tags %}
+{% load ftl %}
+{% ftlconf bundle='privaterelay.ftl_bundles.main' %}
+{% if not user_profile.has_premium %}
+    <div class="dashboard-mpp-promo">
+      <div class="dashboard-mpp-promo-container inset">
+        <h3 class="dashboard-mpp-promo-headline">
+          {% ftlmsg 'banner-pack-upgrade-headline-html' %}
+        </h3>
+        <p>
+          {% ftlmsg 'banner-pack-upgrade-copy' %}
+        </p>
+        <a  class="btn btn--blue" target="_blank" rel="noopener noreferrer"
+            href="{% premium_subscribe_url accept_language %}"
+            data-ga="send-ga-pings"
+            data-event-category="Purchase Button"
+            data-event-label="profile-bottom-promo"
+            data-cookie-for-server="clicked-purchase"
+        >
+          {% ftlmsg 'banner-pack-upgrade-cta' %}
+        </a>
+      </div>
+    </div>
+{% endif %}
