@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% load ftl %}
+{% ftlconf bundle='privaterelay.ftl_bundles.main' %}
+
+{% load socialaccount %}
+
+{% block content %}
+
+{% include "includes/messages.html" %}
+
+<main data-landing-page="" class="flx row-full-width home-hero">
+	<div class="flx flx-row hero-content">
+		<div class="hero-left flx flx-col">
+        <h1 class="home-hero-headline">{% ftlmsg 'home-hero-headline' %}</h1>
+        <span class="sub-head hero-sub-head">{% ftlmsg 'home-hero-copy' %}</span>
+			{% include "includes/landing_ctas.html" with page_position="landing-hero" %}
+		</div>
+		<div class="hero-right flx flx-col">
+      <div class="hero-1 hero-slide"></div>
+      <div class="hero-2 hero-slide"></div>
+      <div class="hero-3 hero-slide"></div>
+      <div class="hero-4 hero-slide"></div>
+      <div class="hero-5 hero-slide"></div>
+		</div>
+	</div>
+</main>
+	<div class="container flx al-cntr flx-col">
+		<div class="how-it-works-content txt-white flx flx-col al-cntr">
+      <h2 class="how-it-works-header text-center">{% ftlmsg 'how-it-works-headline' %}</h2>
+      <span class="text-center">{% ftlmsg 'how-it-works-subheadline' %}</span>
+      <div class="how-it-works-steps flx flx-row">
+        <section class="step step-1 flx flx-col al-cntr">
+            <div class="step-illustration step-1"></div>
+            <div class="step-text step-1">
+              <h3 class="step-headline ff-Met">{% ftlmsg 'how-it-works-step-1-headline' %}</h3>
+              <p class="step-body">
+                {% ftlmsg 'how-it-works-step-1-copy-html' url='https://addons.mozilla.org/firefox/addon/private-relay/' attrs='target="_blank" rel="noopener" class="text-link"' %}
+              </p>
+            </div>
+          </section>
+          <section class="step step-2 flx flx-col al-cntr">
+            <div class="step-illustration step-2"></div>
+            <div class="step-text step-2">
+              <h3 class="step-headline ff-Met">{% ftlmsg 'how-it-works-step-2-headline' %}</h3>
+              <p class="step-body">{% ftlmsg 'how-it-works-step-2-copy' %}</p>
+            </div>
+          </section>
+          <section class="step step-3 flx flx-col al-cntr">
+            <div class="step-illustration step-3"></div>
+            <div class="step-text step-3">
+              <h3 class="step-headline ff-Met">{% ftlmsg 'how-it-works-step-3-headline' %}</h3>
+              <p class="step-body">{% ftlmsg 'how-it-works-step-3-copy' %}</p>
+            </div>
+          </section>
+      </div>
+			{% include "includes/landing_ctas.html" with page_position="landing-bottom" %}
+		</div>
+	</div>
+
+{% endblock %}

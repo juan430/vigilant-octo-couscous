@@ -1,0 +1,30 @@
+{% load socialaccount %}
+{% load static %}
+{% load ftl %}
+{% ftlconf mode=ftl_mode bundle='privaterelay.ftl_bundles.main' %}
+
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="{% ftlmsg 'meta-description' %}" />
+    <title>{% ftlmsg 'meta-title' %}</title>
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <link rel="shortcut icon" href="{%  static 'images/favicon.ico' %}">
+    <link rel=”apple-touch-icon” href="{% static 'images/logos/relay-logo-dark-200.png' %}">
+  </head>
+  <body data-fxa-settings-url="{{ settings.FXA_SETTINGS_URL }}" data-site-origin="{{ settings.SITE_ORIGIN }}" data-google-analytics-id="{{ settings.GOOGLE_ANALYTICS_ID }}" data-debug="{{ settings.DEBUG }}">
+    <firefox-private-relay-addon data-addon-installed="false"></firefox-private-relay-addon>
+    {% include "includes/modal.html" %}
+    {% include "includes/header.html" %}
+    {% block content %}
+    {% endblock %}
+
+    {% include "includes/footer.html" %}
+    <script type="text/javascript" src="{% static 'js/clipboard.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/fx-bento.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/analytics.js' %}"></script>
+  </body>
+</html>

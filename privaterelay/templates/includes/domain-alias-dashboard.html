@@ -1,0 +1,19 @@
+{% load relay_tags %}
+{% load ftl %}
+{% ftlconf bundle='privaterelay.ftl_bundles.main' %}
+{% if not user_profile.has_unlimited %}
+    <div class="dashboard-mpp-promo">
+      <div class="dashboard-mpp-promo-container inset">
+        <h3>
+          {% ftlmsg 'banner-pack-upgrade-headline-html' %}
+        </h3>
+        <p>
+          {% ftlmsg 'banner-pack-upgrade-copy' %}
+        </p>
+        <a class="btn btn--blue" target="_blank" rel="noopener noreferrer"
+         href="{{ settings.FXA_SUBSCRIPTIONS_URL }}/products/{{ settings.PREMIUM_PROD_ID }}?plan={{ settings.PREMIUM_PRICE_ID }}">
+          {% ftlmsg 'banner-pack-upgrade-cta' %}  
+        </a>
+      </div>
+    </div>
+{% endif %}
