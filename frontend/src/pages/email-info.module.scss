@@ -1,0 +1,183 @@
+@import "../styles/tokens.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  // <html> and <body> have overflow set to hidden to accommodate header
+  // positioning (for more info, see `.non-header-wrapper` in
+  // Layout.module.scss), so overflow: auto is needed to re-enable the scrollbar:
+  overflow: auto;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  50% {
+    // Let the loading screen stay hidden for 200ms;
+    // if it gets removed in that time (because the report has initialised),
+    // showing a "loading" message is just distracting:
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.loading {
+  padding: $spacing-xl;
+  height: 100%;
+  background-color: $color-grey-05;
+  animation-name: fadein;
+  animation-duration: 400ms;
+}
+
+.load-error {
+  padding: $spacing-xl;
+  height: 100%;
+  background-color: $color-grey-05;
+}
+
+.emailinfo-wrapper {
+  background-color: $color-grey-05;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-md;
+  width: calc(100% - 2 * $spacing-2xl);
+  max-width: $content-xl;
+  margin: 0 auto;
+
+  .metadata {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  h1 {
+    @include text-title-2xs;
+    font-family: $font-stack-firefox;
+    padding: $spacing-md 0;
+    border-bottom: 1px solid $color-grey-20;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-lg;
+
+    @media screen and #{$mq-md} {
+      flex-direction: row;
+      gap: $spacing-2xl;
+      padding: $spacing-lg $spacing-2xl;
+    }
+
+    dt {
+      color: $color-grey-40;
+    }
+
+    dd {
+      font-weight: 600;
+      color: $color-grey-50;
+    }
+
+    .from {
+      flex: 1 0 auto;
+
+      dd {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: $content-sm;
+      }
+    }
+  }
+
+  .checklist {
+    width: 100%;
+    max-width: $content-xl;
+    border-radius: $border-radius-md;
+    padding: $spacing-2xl;
+
+    ul {
+      margin: 0;
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xl;
+    }
+
+    li {
+      display: flex;
+      gap: $spacing-md;
+
+      .status-icon {
+        width: $layout-sm;
+      }
+
+      .text {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: $spacing-sm;
+
+        .status {
+          @include text-title-3xs;
+        }
+
+        .description {
+          @include text-body-md;
+        }
+
+        .cta {
+          @include text-body-sm;
+          background-color: transparent;
+          border-style: none;
+          padding: 0;
+          color: $color-blue-50;
+          font-weight: 700;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      &.unchecked {
+        .status-icon {
+          color: $color-orange-50;
+        }
+      }
+
+      &.info {
+        .status-icon {
+          color: $color-grey-40;
+        }
+      }
+
+      &.checked {
+        .status-icon {
+          color: $color-green-70;
+        }
+      }
+    }
+  }
+}
+
+.dashboard-link {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  width: 100%;
+  max-width: $content-xl;
+  padding: $spacing-lg;
+  text-decoration: underline;
+  border-radius: $border-radius-md;
+
+  &:hover {
+    color: $color-blue-50;
+  }
+}
