@@ -1,0 +1,12 @@
+.env
+.envrc
+*.sqlite3
+*.prof
+node_modules
+env/
+__pycache__
+web-ext-artifacts/
+htmlcov
+staticfiles
+coverage/
+junit.xml
