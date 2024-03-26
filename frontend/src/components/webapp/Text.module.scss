@@ -1,0 +1,42 @@
+@import "../../styles/tokens.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/mixins/typography";
+@import "~@mozilla-protocol/core/protocol/css/includes/forms/lib";
+
+.wrapper {
+  height: 100%;
+  padding-block: $spacing-md;
+}
+
+.conversation-list-heading {
+  @include text-title-sm;
+  font-family: $font-stack-firefox;
+  padding: $spacing-md $spacing-lg;
+}
+
+.conversation-entry {
+  padding: $spacing-md $spacing-lg;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-blue-50;
+    color: $color-white;
+
+    .datetime {
+      color: $color-white;
+    }
+  }
+
+  dt {
+    display: none;
+  }
+
+  .partner {
+    @include text-body-lg;
+    font-family: $font-stack-firefox;
+  }
+
+  .datetime {
+    @include text-body-xs;
+    color: $color-dark-gray-80;
+  }
+}
