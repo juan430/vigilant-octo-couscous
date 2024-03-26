@@ -1,0 +1,18 @@
+{% load ftl %}
+{% ftlconf bundle='privaterelay.ftl_bundles.main' %}
+
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="{% ftlmsg 'meta-description-2' %}" />
+    <title>{% block head_title %}{% ftlmsg 'meta-title' %}{% endblock %}</title>
+  </head>
+  <body>
+    {% block content %}
+    {% endblock %}
+    {% block javascript %}
+    {% endblock %}
+  </body>
+</html>
