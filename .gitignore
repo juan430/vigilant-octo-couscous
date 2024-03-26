@@ -1,0 +1,11 @@
+.env
+.envrc
+*.sqlite3
+node_modules
+env/
+__pycache__
+web-ext-artifacts/
+htmlcov
+static/downloads
+static/css
+static/scss/libs
