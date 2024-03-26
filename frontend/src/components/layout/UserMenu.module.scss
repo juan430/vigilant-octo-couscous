@@ -1,0 +1,120 @@
+@import "~@mozilla-protocol/core/protocol/css/includes/tokens/dist/index.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+@import "../../styles/tokens.scss";
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.trigger {
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  border-radius: 100%;
+  color: white;
+  overflow: hidden;
+
+  @include text-title-2xs;
+  padding: 0;
+  border-style: none;
+}
+
+.popup {
+  position: absolute;
+  transform: translateX(-100%);
+  margin-top: $spacing-xl;
+  padding: 0;
+  padding-bottom: $spacing-lg;
+  min-width: $content-xs;
+  list-style-type: none;
+  box-shadow: $box-shadow-md;
+  border-radius: $border-radius-md;
+  // The .account-menu-item has its own background color
+  // (to overlap the $firefoxGradient everywhere but at the bottom),
+  // so we need to push it down a bit to avoid that from covering
+  // .popup's rounded corners:
+  padding-top: $border-radius-md;
+  $popupBackgroundColor: $color-light-gray-10;
+  background-color: $popupBackgroundColor;
+
+  &::before {
+    content: "";
+    height: 12px;
+    width: 12px;
+    position: absolute;
+    top: -6px;
+    right: $spacing-md;
+    transform: rotate(45deg);
+    background-color: $popupBackgroundColor;
+  }
+
+  .menu-item-wrapper {
+    .account-menu-item {
+      display: block;
+      $gradientWidth: 3px;
+      background-image: linear-gradient(
+          to bottom,
+          $popupBackgroundColor calc(100% - $gradientWidth),
+          rgba(0, 0, 0, 0)
+        ),
+        $firefoxGradient;
+      margin-bottom: $spacing-md;
+      padding: $spacing-lg;
+      // To avoid overlapping .popup's rounded corners,
+      // it has its own padding-top of $border-radius-md. Subtract that from
+      // the .account-menu-item's padding-top:
+      padding-top: $spacing-lg - $border-radius-md;
+
+      .user-email {
+        font-weight: 700;
+        display: block;
+        color: $color-violet-90;
+      }
+
+      .settings-link {
+        color: $color-dark-gray-50;
+      }
+
+      &:hover {
+        cursor: pointer;
+
+        .settings-link {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .menu-link,
+    .menu-button {
+      display: flex;
+      align-items: center;
+      padding: $spacing-md $spacing-lg;
+      color: $color-violet-90;
+      border-style: none;
+      background-color: transparent;
+      width: 100%;
+      cursor: pointer;
+
+      img {
+        margin-right: $spacing-md;
+      }
+
+      &:hover {
+        background-color: $color-light-gray-20;
+        color: $color-violet-90;
+      }
+    }
+
+    &:focus {
+      outline: none;
+
+      .menu-link,
+      .menu-button,
+      .settings-link {
+        text-decoration: underline;
+      }
+    }
+  }
+}

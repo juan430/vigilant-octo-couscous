@@ -1,0 +1,102 @@
+@import "~@mozilla-protocol/core/protocol/css/includes/tokens/dist/index.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+@import "../styles/tokens.scss";
+
+.banner {
+  border-radius: $border-radius-md;
+  padding: $spacing-md;
+  background-color: $color-white;
+  position: relative;
+
+  &:not(.promo) {
+    box-shadow: $box-shadow-sm;
+  }
+
+  &.promo {
+    // This is the gradient border width (which is implemented as a background image):
+    padding: 2px;
+    background-image: $firefoxGradient;
+  }
+
+  .dismiss-button {
+    position: absolute;
+    top: $spacing-sm;
+    right: $spacing-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border-style: none;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-blue-50;
+      color: $color-white;
+    }
+  }
+}
+
+.highlight-wrapper {
+  display: flex;
+  background-color: $color-white;
+
+  .banner:not(.promo) & {
+    padding: $spacing-xs $spacing-lg $spacing-md;
+    border-left-width: 4px;
+    border-left-style: solid;
+  }
+
+  .banner.promo & {
+    padding: $spacing-md;
+    // .banner's border-radius - .banner's padding.
+    // This is what makes .banner.promo appear as a 2px-wide border:
+    border-radius: calc($border-radius-md - 2px);
+  }
+
+  .warning & {
+    border-color: $color-yellow-50;
+  }
+}
+
+.illustration {
+  padding: $spacing-md;
+  display: flex;
+  align-items: center;
+
+  img {
+    max-width: 60px;
+  }
+}
+
+.title {
+  @include text-title-3xs;
+  font-family: $font-stack-firefox;
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+
+  .icon {
+    margin-right: $spacing-md;
+  }
+}
+
+.cta {
+  a {
+    display: inline-block;
+    padding: $spacing-md 0;
+    font-weight: 700;
+    color: $color-blue-50;
+
+    &:hover {
+      color: $color-blue-40;
+    }
+
+    &:focus {
+      outline: none;
+      text-decoration: underline;
+    }
+  }
+}
