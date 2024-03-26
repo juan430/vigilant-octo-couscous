@@ -1,0 +1,48 @@
+@import "../styles/tokens.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/mixins/typography";
+@import "~@mozilla-protocol/core/protocol/css/includes/forms/lib";
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: $color-blue-50;
+  padding: $spacing-sm $spacing-2xl;
+  border-radius: $border-radius-sm;
+  border: 2px solid transparent;
+  color: $color-white;
+  font-weight: 700;
+  line-height: 1.25;
+
+  @include text-body-md;
+
+  &:hover:not(:disabled) {
+    background-color: $color-blue-60;
+  }
+
+  &:focus {
+    border-color: $button-border-color-focus;
+    box-shadow: $field-focus-ring;
+    color: $color-white;
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: $color-light-gray-80;
+  }
+
+  img {
+    margin: 0 $spacing-xs;
+  }
+
+  &.is-destructive {
+    background-color: $color-red-50;
+
+    &:hover:not(:disabled) {
+      background-color: $color-red-60;
+    }
+  }
+}
