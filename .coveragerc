@@ -1,0 +1,14 @@
+[report]
+omit =
+    *apps.py,
+    *migrations/*,
+    *settings*,
+    *tests/*,
+    *wsgi.py,
+    manage.py,
+    env/*,
+    node_modules/*,
+
+[run]
+relative_files = True
+source = .
