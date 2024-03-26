@@ -1,0 +1,202 @@
+# These environment variables must be set in CircleCI UI
+#
+# DOCKERHUB_REPO - docker hub repo, format: <username>/<repo>
+# DOCKER_USER    - login info for docker hub
+# DOCKER_PASS
+#
+version: 2.1
+orbs:
+  node: circleci/node@5.0.0
+jobs:
+  build_frontend:
+    docker:
+      - image: cimg/node:14.19
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - node/install:
+          node-version: '14'
+      - node/install-packages:
+          app-dir: ./frontend/
+      - run:
+          name: Build Code
+          command: npm run build
+          working_directory: ./frontend/
+      - save_cache:
+          key: v1-frontend-build-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ./frontend/out/
+
+  build:
+    docker:
+      - image: docker:stable-git
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: /dockerflow
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - setup_remote_docker:
+          # Use a version of Docker that works with Node, see
+          # https://support.circleci.com/hc/en-us/articles/360050934711-Docker-build-fails-with-EPERM-operation-not-permitted-copyfile-when-using-node-14-9-0-or-later-
+          # (apparently version 17.09.0-ce is lower than 1.9.1, but 19.03.13 is not?)
+          # and
+          # https://github.com/nodejs/docker-node#supported-docker-versions
+          # and
+          # https://circleci.com/docs/2.0/building-docker-images/#docker-version
+          version: 20.10.11
+      - restore_cache:
+          key: v1-frontend-build-{{ .Branch }}-{{ .Revision }}
+      - run:
+          name: Copy build artefacts from build_frontend into this folder
+          command: mv /home/circleci/project/frontend/out /dockerflow/frontend/
+
+      - run:
+          name: Create a version.json
+          command: |
+            # create a version.json per https://github.com/mozilla-services/Dockerflow/blob/master/docs/version_object.md
+            printf '{"commit":"%s","version":"%s","source":"https://github.com/%s/%s","build":"%s"}\n' \
+            "$CIRCLE_SHA1" \
+            "$CIRCLE_TAG" \
+            "$CIRCLE_PROJECT_USERNAME" \
+            "$CIRCLE_PROJECT_REPONAME" \
+            "$CIRCLE_BUILD_URL" > version.json
+
+      - run:
+          name: Build Docker image
+          command: docker build --tag fx-private-relay .
+
+      # save the built docker container into CircleCI's cache. This is
+      # required since Workflows do not have the same remote docker instance.
+      - run:
+          name: docker save fx-private-relay
+          command: mkdir -p /cache; docker save --output /cache/docker.tar "fx-private-relay"
+      - save_cache:
+          key: v1-{{ .Branch }}-{{epoch}}
+          paths:
+            - /cache/docker.tar
+
+  test_frontend:
+    docker:
+      - image: cimg/node:14.19
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
+      - checkout
+      - node/install:
+          node-version: '14'
+      - node/install-packages:
+          app-dir: ./frontend/
+
+      - run:
+          name: Check licences of frontend dependencies
+          command: npm run licensecheck
+          working_directory: ./frontend/
+      - run:
+          name: Lint Code
+          command: npm run lint -- --max-warnings=0
+          working_directory: ./frontend/
+      - run:
+          name: Test Code
+          command: npm test -- --reporters=jest-junit
+          working_directory: ./frontend/
+      - store_test_results:
+          path: frontend/junit.xml
+      - store_artifacts:
+          path: frontend/coverage/
+          destination: frontend_test_coverage
+
+  test:
+    docker:
+      - image: docker:18.02.0-ce
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
+      - setup_remote_docker
+      - restore_cache:
+          key: v1-{{.Branch}}
+      - run:
+          name: Restore Docker image cache
+          command: docker load --input /cache/docker.tar
+
+      - run:
+          name: Test Code
+          command: docker run --entrypoint "/app/.local/bin/coverage" fx-private-relay run --source=. -m pytest --cov=./ --cov-fail-under=60
+
+  deploy:
+    docker:
+      - image: docker:18.02.0-ce
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
+      - setup_remote_docker
+      - restore_cache:
+          key: v1-{{.Branch}}
+      - run:
+          name: Restore Docker image cache
+          command: docker load --input /cache/docker.tar
+
+      - run:
+          name: Deploy to Dockerhub
+          command: |
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+            # deploy master
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker tag fx-private-relay ${DOCKERHUB_REPO}:latest
+              docker push ${DOCKERHUB_REPO}:latest
+            elif  [ ! -z "${CIRCLE_TAG}" ]; then
+            # deploy a release tag...
+              echo "${DOCKERHUB_REPO}:${CIRCLE_TAG}"
+              docker tag fx-private-relay "${DOCKERHUB_REPO}:${CIRCLE_TAG}"
+              docker images
+              docker push "${DOCKERHUB_REPO}:${CIRCLE_TAG}"
+            fi
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build_frontend:
+          filters:
+            tags:
+              only: /.*/
+
+      - build:
+          requires:
+            - build_frontend
+          filters:
+            tags:
+              only: /.*/
+
+      - test_frontend:
+          requires:
+            - build_frontend
+          filters:
+            tags:
+              only: /.*/
+
+      - test:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+
+      - deploy:
+          requires:
+            - build
+            - test
+          filters:
+            tags:
+              ignore: /addon-.*/
+            branches:
+              only: main

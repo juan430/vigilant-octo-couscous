@@ -1,0 +1,297 @@
+@import "~@mozilla-protocol/core/protocol/css/includes/tokens/dist/index.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+@import "../../../styles/tokens.scss";
+
+$toggleTransitionDuration: 200ms;
+
+.aliasCard {
+  border-radius: $border-radius-md;
+  padding: 0 $spacing-md;
+  transition: background-color $toggleTransitionDuration ease,
+    box-shadow $toggleTransitionDuration ease;
+  background-size: cover;
+  background-position: top;
+
+  &.isEnabled {
+    box-shadow: $box-shadow-sm;
+    background-color: $color-white;
+  }
+
+  &.isDisabled {
+    background-color: rgba($color-white, 0.5);
+  }
+
+  .controls {
+    flex-grow: 2;
+  }
+}
+
+.mainData {
+  display: flex;
+  padding: $spacing-md 0;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  row-gap: $spacing-xs;
+  align-items: center;
+
+  // The label field might not be present,
+  // but if it is (i.e. the copy button/email
+  // address is the third element),
+  // the copy button should be in the same column,
+  // one row below.
+  *:nth-child(3) {
+    grid-column: 2;
+  }
+}
+
+.toggleButton {
+  cursor: pointer;
+  height: 1.15rem;
+  width: 2rem;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: $border-radius-md;
+  margin-right: $spacing-sm;
+  outline: none;
+  background-color: $color-blue-50;
+
+  &:hover,
+  &:focus {
+    background-color: $color-blue-70;
+    box-shadow: $buttonFocusOutline;
+  }
+
+  &:active {
+    background-color: $color-blue-80;
+  }
+
+  // The knob:
+  &::after {
+    content: "";
+    height: 0.75rem;
+    width: 0.75rem;
+    position: absolute;
+    border-radius: 50%;
+    background-color: $color-white;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    right: 4px;
+    transition: left $toggleTransitionDuration ease,
+      right $toggleTransitionDuration ease,
+      background-color $toggleTransitionDuration ease;
+  }
+
+  .isDisabled & {
+    background-color: $color-light-gray-30;
+
+    &:hover,
+    &:focus {
+      background-color: $color-light-gray-40;
+    }
+
+    &:active {
+      background-color: $color-light-gray-50;
+    }
+
+    &::after {
+      left: 4px;
+      right: 18px;
+    }
+  }
+}
+
+.copyControls {
+  display: flex;
+  align-items: center;
+}
+
+.copyButtonWrapper {
+  position: relative;
+
+  .copyButton {
+    @include text-body-lg;
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: 0px none transparent;
+    cursor: pointer;
+    padding: 0 $spacing-sm;
+
+    .address {
+      font-family: $font-stack-firefox;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: $content-md;
+    }
+
+    .copyIcon {
+      padding: 0 $spacing-sm;
+      opacity: 0.5;
+    }
+
+    &:hover {
+      .address {
+        text-decoration: underline;
+      }
+
+      .copyIcon {
+        opacity: 1;
+      }
+    }
+  }
+
+  .copiedConfirmation {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2s;
+    background-color: $color-violet-30;
+    color: $color-white;
+    border-radius: $border-radius-md;
+    padding: $spacing-xs;
+    // By allowing this to overlap other elements,
+    // we don't need to reserve empty space for it.
+    // Otherwise, this empty space would push the
+    // .expandToggle out of the card on small screens:
+    position: absolute;
+    left: 50%;
+    top: 0;
+    // right: 0;
+    transform: translateX(-50%) translateY(-100%);
+
+    &.isShown {
+      pointer-events: auto;
+      opacity: 1;
+      // Don't fade in when appearing:
+      transition: opacity 0s;
+    }
+  }
+}
+
+.aliasStats {
+  display: none;
+
+  @media screen and #{$mq-md} {
+    display: flex;
+  }
+
+  .statWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .tooltip {
+      @include text-body-sm;
+      position: absolute;
+      width: $content-sm;
+      top: 100%;
+      right: $spacing-xs;
+      background-color: $color-light-gray-10;
+      border: 1px solid $color-light-gray-30;
+      box-shadow: $box-shadow-sm;
+      padding: $spacing-sm $spacing-md;
+      border-radius: $border-radius-sm;
+      // Prevent other .statWrapper elements from overlapping this tooltip:
+      z-index: 2;
+    }
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 $spacing-md;
+    transition: opacity $toggleTransitionDuration ease;
+
+    .number {
+      @include text-body-xl;
+      font-family: $font-stack-firefox;
+      font-weight: 700;
+    }
+
+    .isEnabled &.blockedStat,
+    .isDisabled &.forwardedStat {
+      opacity: 0.3;
+    }
+  }
+}
+
+.expandToggle {
+  display: flex;
+  align-items: center;
+
+  button {
+    background-color: transparent;
+    border-style: none;
+    padding: $spacing-sm;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+
+    img {
+      transition: transform 200ms;
+
+      .isExpanded & {
+        transform: rotate(0.5turn);
+      }
+    }
+  }
+}
+
+.secondaryData {
+  max-height: 0;
+  overflow: hidden;
+  border-top: 1px solid transparent;
+  transition: max-height 200ms, border-color 200ms, padding 200ms;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .isExpanded & {
+    // An arbitrary high value that allows it to expand to its full height:
+    max-height: 100vh;
+    border-color: $color-light-gray-30;
+    padding: $spacing-md 0;
+  }
+
+  dl {
+    flex-grow: 2;
+    display: flex;
+    gap: $spacing-sm;
+    flex-direction: column;
+
+    @media screen and #{$mq-md} {
+      flex-direction: row;
+      gap: $spacing-xl;
+    }
+
+    dt {
+      @include text-body-xs;
+      color: $color-dark-gray-05;
+    }
+  }
+
+  @media screen and #{$mq-md} {
+    flex-direction: row;
+
+    .metadata {
+      $metadataIconSize: 24px;
+      background-repeat: no-repeat;
+      background-position: left center;
+      background-size: $metadataIconSize $metadataIconSize;
+      padding-left: calc($metadataIconSize + $spacing-md);
+    }
+
+    .forwardTarget {
+      background-image: url("/icons/email.svg");
+    }
+
+    .dateCreated {
+      background-image: url("/icons/calendar.svg");
+    }
+  }
+}
