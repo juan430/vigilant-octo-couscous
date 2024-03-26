@@ -1,0 +1,101 @@
+@import "../../../../styles/tokens.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+@import "~@mozilla-protocol/core/protocol/css/includes/forms/lib";
+
+button.trigger {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border-style: none;
+  color: inherit;
+  border-radius: $border-radius-lg;
+  cursor: pointer;
+  padding: $spacing-xs $spacing-md;
+  font-family: $font-stack-firefox;
+  position: relative;
+
+  &.is-open {
+    background-color: $color-light-gray-20;
+    color: $color-dark-gray-20;
+
+    &:hover {
+      color: $color-blue-50;
+    }
+  }
+
+  .trigger-label {
+    display: none;
+  }
+
+  .pill {
+    border-radius: 100%;
+    padding: $spacing-sm;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $color-yellow-40;
+    font-weight: 700;
+    color: $color-white;
+    font-style: normal;
+    // On small screens, let the "new news entries" counter slightly overlap
+    // the news icon. These position coordinates are not an exact science.
+    position: absolute;
+    top: -5px;
+    right: 0;
+  }
+
+  @media screen and #{$mq-md} {
+    gap: $spacing-sm;
+    position: initial;
+
+    .trigger-icon {
+      display: none;
+    }
+    .trigger-label {
+      display: initial;
+    }
+    .pill {
+      position: initial;
+    }
+  }
+}
+
+.popover-wrapper {
+  box-shadow: $box-shadow-sm;
+  border-radius: $border-radius-sm;
+  width: min($content-sm, calc(100vw - 2 * $spacing-md));
+
+  &::before {
+    content: "";
+    height: 12px;
+    width: 12px;
+    position: absolute;
+    top: -6px;
+    right: $spacing-lg;
+    transform: rotate(45deg);
+    background-color: $color-white;
+  }
+}
+
+.cta {
+  @include text-body-lg;
+  color: $color-blue-50;
+  font-weight: 500;
+  text-decoration: underline;
+  margin-top: $spacing-sm;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-blue-80;
+  }
+}
+
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-2xl 0;
+}
