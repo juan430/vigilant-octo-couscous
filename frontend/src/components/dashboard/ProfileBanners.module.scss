@@ -1,0 +1,7 @@
+@import "../../styles/tokens.scss";
+
+.profile-banners {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
