@@ -1,0 +1,15 @@
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+@import "../styles/tokens.scss";
+
+.main-wrapper {
+  max-width: calc($content-lg + $layout-lg);
+  width: 100%;
+  margin: 0 auto;
+  padding: $spacing-md;
+  margin-bottom: $layout-md;
+}
+
+.banner-wrapper {
+  @include text-body-sm;
+  padding-bottom: $spacing-xl;
+}
