@@ -1,0 +1,15 @@
+**/.DS_store
+.coverage
+.env
+.envrc
+.git
+extension
+*.sqlite3
+env/
+__pycache__
+web-ext-artifacts/
+htmlcov
+static/downloads
+static/css
+static/scss/libs
+staticfiles
