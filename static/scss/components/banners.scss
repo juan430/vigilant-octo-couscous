@@ -1,0 +1,248 @@
+.mpp-choose-subdomain {
+    background: $color-white;
+    border-radius: $border-radius-md;
+    padding: $spacing-xl $spacing-lg;
+    width: 100%;
+
+    img {
+        display: none;
+        height: auto;
+        align-self: center;
+        max-width: 280px;
+        padding: 0 $spacing-xl;    
+    }
+
+    h2 {
+        font-size: 1.25rem;
+        margin: 0 0 $spacing-sm;
+        padding: 0;
+        color: $color-black;
+    }
+
+    p {
+        margin: 0 0 $spacing-md;
+        padding: 0;
+    }
+
+    form {
+        margin-bottom: $spacing-md;
+    }
+
+    input {
+        width: 100%;
+        display: block;
+        border-radius: $border-radius-sm;
+        padding: $spacing-sm $spacing-md;
+        margin-bottom: $spacing-sm;
+
+        &[type='text'] {
+            border: 1px solid $color-light-gray-20;
+            width: 100%;
+        }
+        
+    }
+
+    .warning {
+        font-size: .9rem;
+        font-weight: 700;
+        color: $color-error;
+    }
+
+    .border {
+        border-left: 1px solid $color-light-gray-20;
+        display: none;
+    }
+}
+
+#mpp-choose-subdomain {
+    // Add a transparent border by default so its content doesn't jump around when the border appears:
+    border: 4px solid transparent;
+
+    &:target {
+        border-color: $color-informational;
+        // The height of the fixed header can vary depending on e.g. whether .micro-survey-banner
+        // is displayed, so this calculation might not result in #mpp-choose-subdomain to be
+        // anchored exactly to the top of the page, but at least it won't be hidden behind
+        // the fixed headers:
+        scroll-margin-top: calc(
+            /* .micro-survey-banner vertical padding: */
+            #{($spacing-md * 2)} +
+            /* .header-top vertical padding: */
+            #{($spacing-xl * 2)} +
+            /* .logo-wrapper height: */
+            40px +
+            /* #mpp-choose-subdomain top border: */
+            4px +
+            /* .branner-gradient-bg bottom margin: */
+            2rem
+        );
+    }
+}
+
+@media screen and (min-width: 540px) {
+
+    .mpp-choose-subdomain form {
+        display: flex;
+
+        input {
+            width: auto;
+
+            &[type='submit'] {
+                margin-left: $spacing-md;
+            }
+        }
+    }
+}
+@media screen and (min-width: 768px) {
+
+    .mpp-choose-subdomain {
+        display: flex;
+
+        img {
+            display: block;
+        }
+
+        .border {
+            display: block;
+        }
+
+        .mpp-choose-subdomain-form {
+            padding-left: $spacing-xl;
+        }
+    }
+}
+
+// Labels data opt in notification banner
+
+.c-notification-banner {
+    display: flex;
+    flex-direction: column;
+    background-color: $color-white;
+    box-shadow: $box-shadow-sm;
+    border-radius: $border-radius-md;
+
+    .notification-banner-bg {
+        padding: $spacing-xs;
+        width: 100%;
+        position: relative;
+        min-height: 0;
+    }
+
+    .notification-banner-content {
+        padding-left: $spacing-sm;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .notification-banner-copy {
+        padding: $spacing-lg;
+    }
+
+    .notification-banner-header {
+        font-family: $font-metropolis;
+        font-size: 1.125em;
+        font-weight: 700;
+        text-align: center;
+        width: 90%;
+        padding-bottom: $spacing-sm;
+        margin: 0;
+        color: $color-grey-50;
+    }
+
+    .notification-banner-header:before {
+        content: "";
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        margin-right: 12px;
+        background-size: 16px;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .notification-banner-sub {
+        margin: 0;
+        line-height: 150%;
+        padding: $spacing-md 0;
+    }
+
+    .notification-banner-link {
+        text-align: center;
+        color: $color-blue-50;
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        width: auto;
+        padding: $spacing-lg 0;
+
+        &:hover {
+            color: $color-blue-40;
+        }
+
+        &:focus {
+            color: $color-blue-40;
+            outline: none;
+        }
+    }
+
+    .dismiss-wrapper {
+        width: 100%;
+        height: 0px;
+    }
+
+    .notification-dismiss {
+        background: transparent;
+        cursor: pointer;
+        display: block;
+        border: none;
+        float: right;
+        position: relative;
+        z-index: 1;
+        padding: $spacing-md $spacing-md 0 0;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+        
+        img {
+            width: 1.5em;
+        }
+    }
+
+    @media #{$mq-md} {
+
+        .notification-banner-copy:before {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            height: calc(100% - #{$spacing-lg});
+            margin-top: -$spacing-lg;
+            width: 5px;
+            margin-left: -$spacing-2xl;
+            border-radius: 5px;
+        }
+
+        .notification-banner-copy {
+            padding: $spacing-xl $spacing-xl $spacing-xl $spacing-2xl;
+        }
+
+        .notification-banner-header, .notification-banner-link {
+            text-align: start;
+        }
+
+    }
+
+    &.t-warning {
+
+        .notification-banner-header:before {
+            background-image: url("/static/images/icon-orange-info.svg");
+        }
+
+        @media #{$mq-md} {
+
+            .notification-banner-copy:before {
+                background: $color-yellow-50;
+            }
+        }
+    }
+}
