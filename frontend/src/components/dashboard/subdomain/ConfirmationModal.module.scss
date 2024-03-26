@@ -1,0 +1,102 @@
+@import "../../../styles/tokens.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+
+.underlay {
+  position: fixed;
+  background-color: rgba($color-black, 0.4);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .dialog-wrapper {
+    background: $color-white;
+    width: calc((#{$content-sm} + #{$content-md}) / 2); // 560px
+    max-width: 90%;
+    border-radius: $border-radius-md;
+    box-shadow: $box-shadow-sm;
+    padding: $spacing-md;
+
+    $illustrationOverlap: $spacing-lg;
+
+    .hero {
+      @include text-body-lg;
+      font-family: $font-stack-firefox;
+      font-weight: 700;
+      text-align: center;
+      border-radius: $border-radius-md;
+      background-color: $color-light-gray-10;
+      padding: $spacing-lg $spacing-md;
+
+      @media screen and #{$mq-md} {
+        @include text-title-3xs;
+      }
+
+      .picked-confirmation & {
+        padding-bottom: $illustrationOverlap + $spacing-lg;
+      }
+
+      .headline {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: $spacing-sm 0;
+        gap: $spacing-sm;
+      }
+
+      .modal-title {
+        font-weight: 400;
+
+        .subdomain {
+          @include text-title-xs;
+          display: block;
+          font-weight: 700;
+          margin-bottom: $spacing-sm;
+          padding: $spacing-sm 0;
+
+          &::before {
+            content: "@";
+          }
+        }
+      }
+    }
+
+    .picked-confirmation-body {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+      align-items: center;
+      padding-top: $spacing-sm;
+
+      .picked-confirmation-body-content {
+        margin: 0 auto;
+        padding: 0 $spacing-sm;
+
+        @media screen and #{$mq-md} {
+          padding: 0 $spacing-2xl;
+        }
+
+        .feature-item-list {
+          @include text-body-sm;
+          list-style-type: none;
+
+          li {
+            margin: $spacing-sm 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: $spacing-md;
+
+            .check-icon {
+              fill: $color-blue-50;
+              min-width: 20px; // Width of the check icons
+            }
+          }
+        }
+      }
+    }
+  }
+}
