@@ -1,0 +1,59 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      eslint:
+        patterns:
+          - "@typescript-eslint/*"
+          - "eslint*"
+        exclude-patterns:
+          - "eslint-config-next"
+      jest:
+        patterns:
+          - "babel-jest"
+          - "jest"
+          - "jest-environment-jsdom"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "react-test-renderer"
+      testing-library:
+        patterns:
+          - "@testing-library/dom"
+          - "@testing-library/react"
+          - "@testing-library/user-event"
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      testing-libraries:
+        patterns:
+          - "coverage"
+          - "model-bakery"
+          - "pytest-cov"
+          - "pytest-django"
+          - "responses"
+      typing-stubs:
+        patterns:
+          - "boto3-stubs"
+          - "botocore-stubs"
+          - "django-stubs"
+          - "djangorestframework-stubs"
+          - "mypy-boto3-ses"
+          - "types-pyOpenSSL"
+          - "types-requests"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
