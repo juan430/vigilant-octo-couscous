@@ -1,0 +1,313 @@
+@import "../../styles/tokens.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+
+  // See https://fkhadra.github.io/react-toastify/how-to-style#override-css-variables
+  --toastify-toast-width: 95%;
+  --toastify-color-light: #{$color-white};
+  --toastify-color-dark: #{$color-grey-50};
+  --toastify-color-info: #{$color-blue-50};
+  --toastify-color-success: #{$color-green-50};
+  --toastify-color-warning: #{$color-yellow-50};
+  --toastify-color-error: #{$color-red-60};
+
+  --toastify-text-color-info: #{$color-white};
+  --toastify-text-color-success: #{$color-grey-50};
+  --toastify-text-color-warning: #{$color-grey-50};
+  --toastify-text-color-error: #{$color-white};
+
+  --toastify-toast-min-height: $layout-md;
+  --toastify-toast-max-height: $layout-md;
+
+  @media screen and #{$mq-md} {
+    // We set padding to zero as we set position for menu to sticky for non-mobile users.
+    padding-top: 0;
+  }
+}
+
+// Allows us to dynamically set the background color based on Toast container state
+$toastify-toast-close-button: var(--toast-close-button);
+
+// Targets the toast container and sets max-width to prevent it from obstructing nav items on larger screens.
+.toast-container {
+  max-width: $content-xl;
+}
+
+.toast {
+  @include text-body-sm;
+  text-align: center;
+  font-weight: 400;
+  min-height: $layout-md;
+  border-radius: $border-radius-sm;
+  font-family: $font-stack-base;
+  padding: 0;
+  max-width: $content-xl;
+  margin: 0 auto;
+
+  @media screen and (max-width: $screen-sm) {
+    width: calc(100% - $spacing-xl);
+    margin-top: $spacing-md;
+  }
+
+  &:global {
+    &[class*="toast--error"],
+    &[class*="toast--info"] {
+      [id*="close-toast-button-icon"] {
+        color: #{$color-white};
+      }
+    }
+
+    & > [class*="toast-body"] {
+      padding: $spacing-md;
+    }
+
+    &[class*="toast--success"],
+    &[class*="toast--warning"] {
+      [id*="close-toast-button-icon"] {
+        color: #{$color-grey-50};
+      }
+    }
+
+    &[class*="toast--error"] {
+      --toast-close-button: #{$color-red-60};
+
+      &:hover {
+        --toastify-color-error: #{$color-red-70};
+      }
+
+      &:active,
+      &:focus {
+        --toastify-color-error: #{$color-red-80};
+        --toast-close-button: #{$color-red-80};
+      }
+    }
+
+    &[class*="toast--info"] {
+      --toast-close-button: #{$color-blue-50};
+
+      &:hover {
+        --toast-close-button: #{$color-blue-60};
+      }
+
+      &:active,
+      &:focus {
+        --toastify-color-info: #{$color-blue-70};
+        --toast-close-button: #{$color-blue-70};
+      }
+    }
+
+    &[class*="toast--success"] {
+      --toast-close-button: #{$color-green-50};
+
+      &:hover {
+        --toast-close-button: #{$color-green-60};
+      }
+
+      &:active,
+      &:focus {
+        --toastify-color-success: #{$color-green-70};
+        --toast-close-button: #{$color-green-70};
+      }
+    }
+
+    &[class*="toast--warning"] {
+      --toast-close-button: #{$color-yellow-50};
+
+      &:hover {
+        --toast-close-button: #{$color-yellow-60};
+      }
+
+      &:active,
+      &:focus {
+        --toastify-color-warning: #{$color-yellow-70};
+        --toast-close-button: #{$color-yellow-70};
+      }
+    }
+  }
+}
+
+.close-toast-button-container {
+  padding: $spacing-md;
+  border-radius: 0 $border-radius-sm $border-radius-sm 0;
+  background-color: $toastify-toast-close-button;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#close-toast-button-icon {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+}
+
+.header {
+  position: sticky;
+  left: 0;
+  top: 0;
+  // The sticky position causes a new stacking context,
+  // which is stacked below elements lower in the document
+  // with their own stacking contexts (specifically,
+  // the floating elements of the hero image when signed out
+  // overlap the AppPicker drawer).
+  // Thus, upping the z-index stack the header, and menus
+  // expanding from it, on top again:
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "logoWrapper appPickerWrapper userMenuWrapper"
+    "navWrapper navWrapper navWrapper";
+  width: 100%;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.06);
+
+  @media screen and #{$mq-md} {
+    grid-template-areas: "logoWrapper navWrapper appPickerWrapper userMenuWrapper";
+  }
+
+  .logo-wrapper {
+    grid-area: logoWrapper;
+    display: flex;
+    align-items: center;
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-md;
+
+      // aligns the logo with the main content @ 1152px,
+      // snaps logo in to place essentially
+      @media screen and (min-width: $content-xl) {
+        padding: $spacing-md $spacing-xl;
+      }
+
+      .logotype {
+        height: 20px;
+      }
+    }
+  }
+
+  .nav-wrapper {
+    display: flex;
+
+    @media screen and #{$mq-md} {
+      grid-area: navWrapper;
+    }
+  }
+
+  .app-picker-wrapper {
+    grid-area: appPickerWrapper;
+    display: none;
+    align-items: center;
+    padding: 0 $spacing-sm;
+
+    @media screen and #{$mq-md} {
+      display: flex;
+    }
+  }
+
+  .user-menu-wrapper {
+    grid-area: userMenuWrapper;
+    display: flex;
+    align-items: center;
+    padding: 0 $spacing-md;
+  }
+
+  a:hover,
+  button:hover {
+    color: $color-blue-50;
+  }
+
+  &.is-dark {
+    background-color: $color-blue-90;
+    border-bottom: 1px solid rgba($color-dark-gray-90, 0.5);
+    box-shadow: 0 0 3px 0 rgba($color-dark-gray-90, 0.5);
+    color: $color-white;
+
+    a:hover,
+    button:hover {
+      color: $color-light-gray-30;
+    }
+  }
+
+  &.is-light {
+    background-color: $color-white;
+    color: $color-grey-40;
+  }
+
+  @media screen and #{$mq-md} {
+    .logo {
+      padding: $spacing-md $spacing-xl;
+    }
+  }
+}
+
+.content {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-light-gray-10;
+}
+
+.footer {
+  background-color: black;
+  color: $color-white;
+  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+
+  @media screen and #{$mq-md} {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .mozilla-logo {
+    padding: $spacing-xl;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-lg;
+    list-style-type: none;
+    gap: $spacing-md;
+
+    @media screen and #{$mq-md} {
+      flex-direction: row;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    a {
+      padding: $spacing-md;
+
+      img {
+        display: inline-block;
+      }
+
+      &:hover {
+        color: $color-light-gray-40;
+
+        img {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
+
+.api-mock-warning {
+  background-color: $color-yellow-10;
+  padding: $spacing-md $spacing-lg;
+  text-align: center;
+  position: relative;
+  // We set the index to '2' to overlap mobile menu
+  // Mimicking the behavior of the header
+  z-index: 2;
+}

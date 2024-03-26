@@ -1,0 +1,281 @@
+@import "../../../styles/tokens.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/lib";
+
+$toggleTransitionDuration: 200ms;
+
+.alias-card {
+  border-radius: $border-radius-md;
+  padding: 0 $spacing-md;
+  transition: background-color $toggleTransitionDuration ease,
+    box-shadow $toggleTransitionDuration ease;
+  background-size: cover;
+  background-position: top;
+
+  &.is-enabled {
+    box-shadow: $box-shadow-sm;
+    background-color: $color-white;
+  }
+
+  &.is-disabled {
+    background-color: rgba($color-white, 0.5);
+  }
+
+  .controls {
+    flex-grow: 2;
+  }
+}
+
+.main-data {
+  display: flex;
+  padding: $spacing-md 0;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: $spacing-xs;
+  align-items: center;
+}
+
+.copy-controls {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.copy-button-wrapper {
+  position: relative;
+  width: 100%;
+
+  .copy-button {
+    @include text-body-lg;
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: 0px none transparent;
+    cursor: pointer;
+    padding: 0 $spacing-sm;
+    width: 100%;
+    flex-basis: 0;
+
+    .address {
+      font-family: $font-stack-firefox;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+      text-align: start;
+      flex-grow: 0;
+      flex-shrink: 1;
+    }
+
+    .copy-icon {
+      padding: 0 $spacing-sm;
+      opacity: 0.5;
+      display: inline-block;
+      flex-grow: 2;
+      flex-shrink: 0;
+      max-width: $layout-sm;
+    }
+
+    &:hover {
+      .address {
+        text-decoration: underline;
+      }
+
+      .copy-icon {
+        opacity: 1;
+      }
+    }
+  }
+
+  .copied-confirmation {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2s;
+    background-color: $color-violet-30;
+    color: $color-white;
+    border-radius: $border-radius-md;
+    padding: 0 $spacing-xs;
+    // By allowing this to overlap other elements,
+    // we don't need to reserve empty space for it.
+    // Otherwise, this empty space would push the
+    // .expand-toggle out of the card on small screens:
+    position: absolute;
+    left: $spacing-xs;
+    top: 0;
+
+    &.is-shown {
+      pointer-events: auto;
+      opacity: 1;
+      // Don't fade in when appearing:
+      transition: opacity 0s;
+    }
+  }
+}
+
+.block-level-label-wrapper {
+  display: none;
+  align-items: center;
+
+  @media screen and #{$mq-md} {
+    display: flex;
+  }
+
+  .block-level-label {
+    @include text-body-sm;
+    border: 2px solid transparent;
+    border-radius: $border-radius-sm;
+    padding: $spacing-sm;
+    font-weight: 600;
+
+    &.block-level-all-label {
+      color: $color-light-gray-70;
+      border-color: $color-light-gray-40;
+    }
+
+    &.block-level-promotional-label {
+      color: $color-yellow-50;
+      border-color: $color-yellow-40;
+    }
+  }
+}
+
+.alias-stats {
+  display: none;
+
+  @media screen and #{$mq-md} {
+    display: flex;
+  }
+
+  .stat-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .tooltip {
+      @include text-body-sm;
+      position: absolute;
+      width: $content-sm;
+      top: 100%;
+      right: $spacing-xs;
+      background-color: $color-light-gray-10;
+      border: 1px solid $color-light-gray-30;
+      box-shadow: $box-shadow-sm;
+      padding: $spacing-sm $spacing-md;
+      border-radius: $border-radius-sm;
+      // Prevent other .stat-wrapper elements from overlapping this tooltip:
+      z-index: 2;
+    }
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 $spacing-md;
+    transition: opacity $toggleTransitionDuration ease;
+
+    .number {
+      @include text-body-xl;
+      font-family: $font-stack-firefox;
+      font-weight: 700;
+    }
+
+    .is-enabled &.blocked-stat,
+    .is-disabled &.forwarded-stat {
+      opacity: 0.3;
+    }
+  }
+}
+
+.expand-toggle {
+  display: flex;
+  align-items: center;
+
+  button {
+    background-color: transparent;
+    border-style: none;
+    padding: $spacing-sm;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+
+    img {
+      transition: transform 200ms;
+
+      .is-expanded & {
+        transform: rotate(0.5turn);
+      }
+    }
+  }
+}
+
+.secondary-data {
+  max-height: 0;
+  overflow: hidden;
+  border-top: 1px solid transparent;
+  transition: max-height 200ms, border-color 200ms, padding 200ms;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  // Make sure hidden elements are unfocusable:
+  visibility: hidden;
+
+  .is-expanded & {
+    // An arbitrary high value that allows it to expand to its full height:
+    max-height: 100vh;
+    border-color: $color-light-gray-30;
+    padding: $spacing-sm 0;
+    visibility: visible;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $color-light-gray-20;
+
+    &:last-child {
+      border-bottom-style: none;
+      padding-bottom: 0;
+    }
+
+    dl {
+      flex-grow: 2;
+      display: flex;
+      gap: $spacing-sm;
+      flex-direction: column;
+
+      @media screen and #{$mq-md} {
+        flex-direction: row;
+        gap: $spacing-xl;
+      }
+
+      dt {
+        @include text-body-xs;
+        color: $color-dark-gray-05;
+      }
+    }
+
+    @media screen and #{$mq-md} {
+      flex-direction: row;
+
+      .metadata {
+        $metadataIconSize: 24px;
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: $metadataIconSize $metadataIconSize;
+        padding-left: calc($metadataIconSize + $spacing-md);
+      }
+
+      .forward-target {
+        background-image: url("/icons/email.svg");
+      }
+
+      .date-created {
+        background-image: url("/icons/calendar.svg");
+      }
+    }
+  }
+}
