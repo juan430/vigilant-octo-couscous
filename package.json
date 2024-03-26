@@ -1,0 +1,36 @@
+{
+  "name": "fx-private-relay",
+  "description": "Firefox Relay provides generated email addresses to use in place of personal email addresses.",
+  "version": "1.0.0",
+  "author": "Mozilla",
+  "bugs": {
+    "url": "https://github.com/mozilla/fx-private-relay/issues"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.36.1",
+    "dotenv": "^16.3.1"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.2"
+  },
+  "license": "MPL-2.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mozilla/fx-private-relay.git"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "test:e2e": "playwright test --retries=2",
+    "test:local": "E2E_TEST_ENV=local playwright test --headed",
+    "test:dev": "E2E_TEST_ENV=dev playwright test --retries=2",
+    "test:stage": "E2E_TEST_ENV=stage playwright test --retries=2",
+    "test:prod": "E2E_TEST_ENV=prod playwright test --retries=2",
+    "heroku-prebuild": "printf '{\"commit\":\"%s\", \"commit_link\":\"https://github.com/mozilla/fx-private-relay/commit/%s\"}\n' \"$SOURCE_VERSION\" \"$SOURCE_VERSION\" > version.json",
+    "heroku-postbuild": "cd frontend; NODE_ENV=\"development\" npm ci; npm run build"
+  },
+  "homepage": "https://github.com/mozilla/fx-private-relay#readme"
+}
