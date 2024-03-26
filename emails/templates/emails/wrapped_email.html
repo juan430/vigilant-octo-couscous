@@ -1,0 +1,96 @@
+{% load ftl %}
+{% load email_extras %}
+{% withftl mode='server' bundle='privaterelay.ftl_bundles.main' language=recipient_profile.language %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width"/>
+    <title>Firefox Relay</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      a {
+        text-decoration: none;
+        color: #20123a;
+        transition: all 0.2s ease;
+      }
+      a:hover {
+        color: #20123ad5;
+        transition: all 0.2s ease;
+      }
+      a:hover,
+      a:focus,
+      a:active {
+        transition: all 0.2s ease;
+      }
+    </style>
+  </head>
+  <body style="padding: 0; margin: 0;">
+    <table width="100%" bgcolor="#f9f9fa" style="background: #f9f9fa; padding-top: 12px; padding-right: 12px; padding-left: 12px; padding-bottom:12px; margin-top: 0px; margin-bottom: 30px; width: 100%;">
+      <tr>
+        <td align="center" valign="top" width="100%" style="max-width:800px; padding-top: 0px; padding-bottom: 0px;">
+          <table width="100%" style="max-width:700px; text-align: center; border-collapse: collapse;">
+            <tr>
+              <td width="100%" align="center" style="line-height: 150%;">
+                <p style="color: #363959; font-size: 13px; font-family: sans-serif; margin-top: 0; margin-bottom: 0;">
+                  {% bold_violet_text display_email as bolded_email %}
+                  {% bold_violet_link SITE_ORIGIN 'Firefox Private Relay' as linked_origin %}
+                  {% ftlmsg 'forwarded-email-header-from' display_email=bolded_email linked_origin=linked_origin as email_wrap_forwarded_from %}
+                  {{ email_wrap_forwarded_from|safe }}
+                  {% if has_attachment %}
+                      {% ftlmsg 'nav-faq' as faq_text %}
+                      {% url 'faq' as faq_url %}
+                      {% bold_violet_link faq_url faq_text as faq_link %}
+                      {% ftlmsg 'forwarded-email-header-attachment' faq_link=faq_link size='150' unit='KB' as forwarded_email_wrap_attachment %}
+                      {{ forwarded_email_wrap_attachment|safe }}
+                  {% else %}
+                    {% if survey_text and survey_link %}
+                    <br><a href="{{ survey_link }}" target="_blank" style="font-family: sans-serif; color: #20123a; text-decoration: underline; font-weight: bolder; font-size: 13px;">{{ survey_text }}</a>.
+                    {% endif %}
+                  {% endif %}
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <table width="100%; padding: 0; margin: 0;">
+      <tr>
+        <td width="100%">
+          {{ original_html|safe }}
+        </td>
+      </tr>
+    </table>
+    <table width="100%" align="center" bgcolor="#f9f9fa" style="background: #f9f9fa; padding-top: 12px; padding-right: 12px; padding-left: 12px; padding-bottom:12px; margin-top: 0px; margin-bottom: 30px; width: 100%;"">
+      <tr>
+        <td align="center" valign="top" width="100%" style="max-width:700px; padding-top: 12px; padding-bottom: 24px;">
+          <table align="center" width="100%" style="max-width: 700px; border-collapse: collapse; padding-top: 0px; padding-bottom: 0px;">
+            <tr>
+              <td align="center" width="100%" style="padding-top: 0px; padding-bottom: 8px; text-align: center">
+                <img width="160" src="{{ SITE_ORIGIN }}/static/images/email-images/relay-logo-emails.png" style="display: inline-block; margin-bottom: 0px; width: 160px;" alt="Relay Logo" />
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="line-height: 150%; padding-left: 20px; padding-right: 20px;">
+                <p style="display: inline-block; padding-top: 0; font-size: 13px; color: #363959; font-family: sans-serif; padding-left: 20px; padding-right: 20px; margin-top: 0; margin-bottom: 0;">
+                <a href="{{ SITE_ORIGIN }}/accounts/profile?utm_source=emails&utm_medium=email&utm_campaign=alias-email" target="_blank" style="font-family: sans-serif; color: #20123a; text-decoration: underline; font-weight: bolder; font-size: 13px;">{% ftlmsg 'forwarded-email-footer' %}</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+{% endwithftl %}
