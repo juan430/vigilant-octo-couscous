@@ -1,0 +1,69 @@
+@import "../styles/tokens.scss";
+@import "~@mozilla-protocol/core/protocol/css/includes/mixins/typography";
+@import "~@mozilla-protocol/core/protocol/css/includes/forms/lib";
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  cursor: pointer;
+  background-color: $color-blue-50;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-sm;
+  border: 2px solid transparent;
+  color: $color-white;
+  font-weight: 700;
+  line-height: 1.25;
+
+  @include text-body-md;
+
+  &:hover:not(:disabled) {
+    background-color: $color-blue-60;
+    opacity: 1;
+  }
+
+  &:focus {
+    border-color: $button-border-color-focus;
+    box-shadow: $field-focus-ring;
+    color: $color-white;
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: $color-light-gray-80;
+  }
+
+  &.is-destructive {
+    background-color: $color-red-60;
+
+    &:disabled {
+      background-color: $color-red-10;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: $color-red-70;
+      opacity: 1;
+    }
+  }
+
+  &.is-secondary {
+    background-color: transparent;
+    border: none;
+    color: $color-blue-50;
+
+    &:disabled {
+      opacity: 0.4;
+    }
+
+    &:active {
+      color: $color-blue-70;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: transparent;
+      color: $color-blue-60;
+    }
+  }
+}
