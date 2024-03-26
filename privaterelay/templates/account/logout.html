@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load ftl %}
+{% ftlconf bundle='privaterelay.ftl_bundles.main' %}
+
+{% block head_title %}{% ftlmsg 'nav-profile-sign-out' %}{% endblock %}
+
+{% block content %}
+<p>{% ftlmsg 'nav-profile-sign-out-confirm' %}</p>
+<form method="post" action="{% url 'account_logout' %}">
+  {% csrf_token %}
+  {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  {% endif %}
+  <button type="submit">{% ftlmsg 'nav-profile-sign-out' %}</button>
+</form>
+{% endblock %}
